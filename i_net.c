@@ -35,6 +35,10 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 #include <netdb.h>
 #include <sys/ioctl.h>
 
+#ifdef AUX
+#include "auxhelp.h"
+#endif
+
 #include "i_system.h"
 #include "d_event.h"
 #include "d_net.h"
@@ -52,18 +56,27 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 
 
 // For some odd reason...
+#ifndef ntohl
 #define ntohl(x) \
         ((unsigned long int)((((unsigned long int)(x) & 0x000000ffU) << 24) | \
                              (((unsigned long int)(x) & 0x0000ff00U) <<  8) | \
                              (((unsigned long int)(x) & 0x00ff0000U) >>  8) | \
                              (((unsigned long int)(x) & 0xff000000U) >> 24)))
+#endif
 
+#ifndef ntohs
 #define ntohs(x) \
         ((unsigned short int)((((unsigned short int)(x) & 0x00ff) << 8) | \
-                              (((unsigned short int)(x) & 0xff00) >> 8))) \
-	  
+                              (((unsigned short int)(x) & 0xff00) >> 8)))
+#endif
+
+#ifndef htonl 
 #define htonl(x) ntohl(x)
+#endif
+
+#ifndef htons
 #define htons(x) ntohs(x)
+#endif
 
 void	NetSend (void);
 boolean NetListen (void);
@@ -128,6 +141,9 @@ void PacketSend (void)
 {
     int		c;
     doomdata_t	sw;
+#ifdef AUX
+    char       *swptr;
+#endif
 				
     // byte swap
     sw.checksum = htonl(netbuffer->checksum);
@@ -146,9 +162,16 @@ void PacketSend (void)
     }
 		
     //printf ("sending %i\n",gametic);		
+#ifdef AUX
+    swptr = (char *) &sw;
+    c = sendto (sendsocket , swptr, doomcom->datalength
+		,0,(void *)&sendaddress[doomcom->remotenode]
+		,sizeof(sendaddress[doomcom->remotenode]));
+#else
     c = sendto (sendsocket , &sw, doomcom->datalength
 		,0,(void *)&sendaddress[doomcom->remotenode]
 		,sizeof(sendaddress[doomcom->remotenode]));
+#endif
 	
     //	if (c == -1)
     //		I_Error ("SendPacket error: %s",strerror(errno));
@@ -165,10 +188,19 @@ void PacketGet (void)
     struct sockaddr_in	fromaddress;
     int			fromlen;
     doomdata_t		sw;
+#ifdef AUX
+    char               *swptr;
+#endif
 				
     fromlen = sizeof(fromaddress);
+#ifdef AUX
+    swptr = (char *) &sw;
+    c = recvfrom (insocket, swptr, sizeof(sw), 0
+		  , (struct sockaddr *)&fromaddress, &fromlen );
+#else
     c = recvfrom (insocket, &sw, sizeof(sw), 0
 		  , (struct sockaddr *)&fromaddress, &fromlen );
+#endif
     if (c == -1 )
     {
 	if (errno != EWOULDBLOCK)

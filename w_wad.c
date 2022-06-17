@@ -17,7 +17,7 @@
 // $Log:$
 //
 // DESCRIPTION:
-//	Handles WAD fileheader, directory, lump I/O.
+//	Handles WAD file header, directory, lump I/O.
 //
 //-----------------------------------------------------------------------------
 
@@ -34,8 +34,17 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #include <malloc.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-// #include <alloca.h> // Removed for A/UX compatibility
+#ifdef LINUX
+#include <alloca.h>
+#endif
+#ifdef AUX
+#include <malloc.h>
+#endif
 #define O_BINARY		0
+#endif
+
+#ifdef AUX
+#include "auxhelp.h"
 #endif
 
 #include "doomtype.h"
@@ -58,7 +67,7 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 //
 
 // Location of each lump on disk.
-lumpinfo_t*		lumpinfo;		
+lumpinfo_t*		lumpinfo;
 int			numlumps;
 
 void**			lumpcache;
@@ -80,7 +89,6 @@ int filelength (int handle)
 
     return fileinfo.st_size;
 }
-
 
 
 void
@@ -170,27 +178,21 @@ void W_AddFile (char *filename)
     printf (" adding %s\n",filename);
     startlump = numlumps;
 	
-	printf (" extension: %s\n", filename+strlen(filename)-3);
-	
-    // Removed a bunch of this just so we can avoid strcmpi use.
-
-    //if (strcmpi (filename+strlen(filename)-3 , "wad" ) )
-    //{
+    if (strcmpi (filename+strlen(filename)-3 , "wad" ) )
+    {
 	// single lump file
-	/*fileinfo = &singleinfo;
+	fileinfo = &singleinfo;
 	singleinfo.filepos = 0;
 	singleinfo.size = LONG(filelength(handle));
 	ExtractFileBase (filename, singleinfo.name);
-	numlumps++;*/
-	printf("%s: WAD!\n", filename);
-    /*}
+	numlumps++;
+    }
     else 
     {
 	// WAD file
 	read (handle, &header, sizeof(header));
 	if (strncmp(header.identification,"IWAD",4))
 	{
-		printf("%s: IWAD?\n", filename);
 	    // Homebrew levels?
 	    if (strncmp(header.identification,"PWAD",4))
 	    {
@@ -199,31 +201,27 @@ void W_AddFile (char *filename)
 	    }
 	    
 	    // ???modifiedgame = true;		
-	}*/
-	
-	read (handle, &header, sizeof(header));
+	}
 	header.numlumps = LONG(header.numlumps);
-	printf("Number of lumps in file: %d\n", header.numlumps);
 	header.infotableofs = LONG(header.infotableofs);
 	length = header.numlumps*sizeof(filelump_t);
-	// fileinfo = alloca (length);
-	fileinfo = malloc (length);
+#ifdef LINUX
+	fileinfo = alloca (length);
+#endif
+#ifdef AUX
+	fileinfo = (filelump_t *) malloc (length);
+#endif
 	lseek (handle, header.infotableofs, SEEK_SET);
 	read (handle, fileinfo, length);
-	numlumps = numlumps + header.numlumps;
-	
-    //}
+	numlumps += header.numlumps;
+    }
 
-	
-    // Fill in lumpinfo -- Cari hacked this because it would work
-    //printf("Number of lumps: %d\n", numlumps);
+    
+    // Fill in lumpinfo
     lumpinfo = realloc (lumpinfo, numlumps*sizeof(lumpinfo_t));
-	
-	// Spits out the size
-	//perror("WAD Lump Size issue!");
-	
+
     if (!lumpinfo)
-	I_Error ("Couldn't realloc lumpinfo with this hack?");
+	I_Error ("Couldn't realloc lumpinfo");
 
     lump_p = &lumpinfo[startlump];
 	
@@ -269,7 +267,12 @@ void W_Reload (void)
     lumpcount = LONG(header.numlumps);
     header.infotableofs = LONG(header.infotableofs);
     length = lumpcount*sizeof(filelump_t);
+#ifdef LINUX
     fileinfo = alloca (length);
+#endif
+#ifdef AUX
+    fileinfo = malloc (length);
+#endif
     lseek (handle, header.infotableofs, SEEK_SET);
     read (handle, fileinfo, length);
     
@@ -313,12 +316,10 @@ void W_InitMultipleFiles (char** filenames)
     numlumps = 0;
 
     // will be realloced as lumps are added
-    lumpinfo = malloc(1);	
+    lumpinfo = malloc(sizeof(lumpinfo_t));	
 
     for ( ; *filenames ; filenames++)
 	W_AddFile (*filenames);
-
-	printf("Number of lumps total: %d\n", numlumps);
 
     if (!numlumps)
 	I_Error ("W_InitFiles: no files found");
@@ -417,7 +418,6 @@ int W_CheckNumForName (char* name)
 int W_GetNumForName (char* name)
 {
     int	i;
-	//printf("W_GetNumForName: %s\n", name);
 
     i = W_CheckNumForName (name);
     

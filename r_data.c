@@ -27,6 +27,10 @@
 static const char
 rcsid[] = "$Id: r_data.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 
+#ifdef AUX
+#include "auxhelp.h"
+#endif
+
 #include "i_system.h"
 #include "z_zone.h"
 
@@ -41,10 +45,13 @@ rcsid[] = "$Id: r_data.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 #include "doomstat.h"
 #include "r_sky.h"
 
+#ifdef LINUX
+#include <alloca.h>
+#endif
+
+#ifdef AUX
 #include <malloc.h>
-//#ifdef LINUX
-//#include  <alloca.h>
-//#endif
+#endif
 
 
 #include "r_data.h"
@@ -320,7 +327,12 @@ void R_GenerateLookup (int texnum)
     //  that are covered by more than one patch.
     // Fill in the lump / offset, so columns
     //  with only a single patch are all done.
+#ifdef LINUX
     patchcount = (byte *)alloca (texture->width);
+#endif
+#ifdef AUX
+    patchcount = malloc (texture->width);
+#endif
     memset (patchcount, 0, texture->width);
     patch = texture->patches;
 		
@@ -449,9 +461,13 @@ void R_InitTextures (void)
     names = W_CacheLumpName ("PNAMES", PU_STATIC);
     nummappatches = LONG ( *((int *)names) );
     name_p = names+4;
-    //patchlookup = alloca (nummappatches*sizeof(*patchlookup));
+#ifdef LINUX
+    patchlookup = alloca (nummappatches*sizeof(*patchlookup));
+#endif
+#ifdef AUX
     patchlookup = malloc (nummappatches*sizeof(*patchlookup));
-	
+#endif
+    
     for (i=0 ; i<nummappatches ; i++)
     {
 	strncpy (name,name_p+i*8, 8);
@@ -695,9 +711,6 @@ int R_FlatNumForName (char* name)
 // Check whether texture is available.
 // Filter out NoTexture indicator.
 //
-
-
-
 int	R_CheckTextureNumForName (char *name)
 {
     int		i;
@@ -764,7 +777,12 @@ void R_PrecacheLevel (void)
 	return;
     
     // Precache flats.
+#ifdef LINUX
     flatpresent = alloca(numflats);
+#endif
+#ifdef AUX
+    flatpresent = malloc(numflats);
+#endif
     memset (flatpresent,0,numflats);	
 
     for (i=0 ; i<numsectors ; i++)
@@ -786,7 +804,12 @@ void R_PrecacheLevel (void)
     }
     
     // Precache textures.
+#ifdef LINUX
     texturepresent = alloca(numtextures);
+#endif
+#ifdef AUX
+    texturepresent = malloc(numtextures);
+#endif
     memset (texturepresent,0, numtextures);
 	
     for (i=0 ; i<numsides ; i++)
@@ -821,7 +844,12 @@ void R_PrecacheLevel (void)
     }
     
     // Precache sprites.
+#ifdef LINUX
     spritepresent = alloca(numsprites);
+#endif
+#ifdef AUX
+    spritepresent = alloca(numsprites);
+#endif
     memset (spritepresent,0, numsprites);
 	
     for (th = thinkercap.next ; th != &thinkercap ; th=th->next)

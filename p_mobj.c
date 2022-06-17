@@ -100,8 +100,8 @@ void P_ExplodeMissile (mobj_t* mo)
 
     mo->flags &= ~MF_MISSILE;
 
-  //  if (mo->info->deathsound)
-//	S_StartSound (mo, mo->info->deathsound);
+    if (mo->info->deathsound)
+	S_StartSound (mo, mo->info->deathsound);
 }
 
 
@@ -304,7 +304,7 @@ void P_ZMovement (mobj_t* mo)
 		// after hitting the ground (hard),
 		// and utter appropriate sound.
 		mo->player->deltaviewheight = mo->momz>>3;
-//		S_StartSound (mo, sfx_oof);
+		S_StartSound (mo, sfx_oof);
 	    }
 	    mo->momz = 0;
 	}
@@ -376,23 +376,23 @@ P_NightmareRespawn (mobj_t* mobj)
 		      mobj->y,
 		      mobj->subsector->sector->floorheight , MT_TFOG); 
     // initiate teleport sound
-   // S_StartSound (mo, sfx_telept);
+    S_StartSound (mo, sfx_telept);
 
     // spawn a teleport fog at the new spot
     ss = R_PointInSubsector (x,y); 
 
     mo = P_SpawnMobj (x, y, ss->sector->floorheight , MT_TFOG); 
 
- //   S_StartSound (mo, sfx_telept);
+    S_StartSound (mo, sfx_telept);
 
     // spawn the new monster
     mthing = &mobj->spawnpoint;
 	
     // spawn it
     if (mobj->info->flags & MF_SPAWNCEILING)
-	z = ONCEILINGZ;
+	z = (ONCEILINGZ);
     else
-	z = ONFLOORZ;
+	z = (ONFLOORZ);
 
     // inherit attributes from deceased one
     mo = P_SpawnMobj (x,y,z, mobj->type);
@@ -519,9 +519,9 @@ P_SpawnMobj
     mobj->floorz = mobj->subsector->sector->floorheight;
     mobj->ceilingz = mobj->subsector->sector->ceilingheight;
 
-    if (z == ONFLOORZ)
+    if (z == (ONFLOORZ))
 	mobj->z = mobj->floorz;
-    else if (z == ONCEILINGZ)
+    else if (z == (ONCEILINGZ))
 	mobj->z = mobj->ceilingz - mobj->info->height;
     else 
 	mobj->z = z;
@@ -563,7 +563,7 @@ void P_RemoveMobj (mobj_t* mobj)
     P_UnsetThingPosition (mobj);
     
     // stop any playing sound
-    //S_StopSound (mobj);
+    S_StopSound (mobj);
     
     // free block
     P_RemoveThinker ((thinker_t*)mobj);
@@ -607,7 +607,7 @@ void P_RespawnSpecials (void)
     // spawn a teleport fog at the new spot
     ss = R_PointInSubsector (x,y); 
     mo = P_SpawnMobj (x, y, ss->sector->floorheight , MT_IFOG); 
-  //  S_StartSound (mo, sfx_itmbk);
+    S_StartSound (mo, sfx_itmbk);
 
     // find which type to spawn
     for (i=0 ; i< NUMMOBJTYPES ; i++)
@@ -618,9 +618,9 @@ void P_RespawnSpecials (void)
     
     // spawn it
     if (mobjinfo[i].flags & MF_SPAWNCEILING)
-	z = ONCEILINGZ;
+	z = (ONCEILINGZ);
     else
-	z = ONFLOORZ;
+	z = (ONFLOORZ);
 
     mo = P_SpawnMobj (x,y,z, i);
     mo->spawnpoint = *mthing;	
@@ -661,7 +661,7 @@ void P_SpawnPlayer (mapthing_t* mthing)
 
     x 		= mthing->x << FRACBITS;
     y 		= mthing->y << FRACBITS;
-    z		= ONFLOORZ;
+    z		= (ONFLOORZ);
     mobj	= P_SpawnMobj (x,y,z, MT_PLAYER);
 
     // set color translations for player sprites
@@ -777,9 +777,9 @@ void P_SpawnMapThing (mapthing_t* mthing)
     y = mthing->y << FRACBITS;
 
     if (mobjinfo[i].flags & MF_SPAWNCEILING)
-	z = ONCEILINGZ;
+	z = (ONCEILINGZ);
     else
-	z = ONFLOORZ;
+	z = (ONFLOORZ);
     
     mobj = P_SpawnMobj (x,y,z, i);
     mobj->spawnpoint = *mthing;
@@ -899,8 +899,8 @@ P_SpawnMissile
 		      source->y,
 		      source->z + 4*8*FRACUNIT, type);
     
-  //  if (th->info->seesound)
-//	S_StartSound (th, th->info->seesound);
+    if (th->info->seesound)
+	S_StartSound (th, th->info->seesound);
 
     th->target = source;	// where it came from
     an = R_PointToAngle2 (source->x, source->y, dest->x, dest->y);	
@@ -972,8 +972,8 @@ P_SpawnPlayerMissile
 	
     th = P_SpawnMobj (x,y,z, type);
 
-//    if (th->info->seesound)
-//	S_StartSound (th, th->info->seesound);
+    if (th->info->seesound)
+	S_StartSound (th, th->info->seesound);
 
     th->target = source;
     th->angle = an;

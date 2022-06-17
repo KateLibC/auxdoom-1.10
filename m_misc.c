@@ -209,7 +209,7 @@ extern	int	numChannels;
 
 // UNIX hack, to be removed.
 #ifdef SNDSERV
-//extern char*	sndserver_filename;
+extern char*	sndserver_filename;
 extern int	mb_used;
 #endif
 
@@ -234,8 +234,8 @@ typedef struct
 default_t	defaults[] =
 {
     {"mouse_sensitivity",&mouseSensitivity, 5},
-    //{"sfx_volume",&snd_SfxVolume, 8},
-    //{"music_volume",&snd_MusicVolume, 8},
+    {"sfx_volume",&snd_SfxVolume, 8},
+    {"music_volume",&snd_MusicVolume, 8},
     {"show_messages",&showMessages, 1},
     
 
@@ -253,10 +253,10 @@ default_t	defaults[] =
     {"key_speed",&key_speed, KEY_RSHIFT},
 
 // UNIX hack, to be removed. 
-//#ifdef SNDSERV
-//    {"sndserver", (int *) &sndserver_filename, (int) "sndserver"},
-//    {"mb_used", &mb_used, 2},
-//#endif
+#ifdef SNDSERV
+    {"sndserver", (int *) &sndserver_filename, (int) "sndserver"},
+    {"mb_used", &mb_used, 2},
+#endif
     
 #endif
 
@@ -279,7 +279,7 @@ default_t	defaults[] =
     {"screenblocks",&screenblocks, 9},
     {"detaillevel",&detailLevel, 0},
 
-    //{"snd_channels",&numChannels, 3},
+    {"snd_channels",&numChannels, 3},
 
 
 
@@ -344,7 +344,7 @@ void M_LoadDefaults (void)
     FILE*	f;
     char	def[80];
     char	strparm[100];
-    char*	newstring;
+    char*	newstring = NULL;
     int		parm;
     boolean	isstring;
     

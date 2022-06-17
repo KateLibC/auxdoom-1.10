@@ -389,12 +389,11 @@ void D_DoomLoop (void)
 	    TryRunTics (); // will run at least one tic
 	}
 		
-	//S_UpdateSounds (players[consoleplayer].mo);// move positional sounds
+	S_UpdateSounds (players[consoleplayer].mo);// move positional sounds
 
 	// Update display, next frame, with current state.
 	D_Display ();
 
-/*
 #ifndef SNDSERV
 	// Sound mixing for the buffer is snychronous.
 	I_UpdateSound();
@@ -404,7 +403,6 @@ void D_DoomLoop (void)
 	// Update sound output.
 	I_SubmitSound();
 #endif
-*/
     }
 }
 
@@ -475,10 +473,10 @@ void D_AdvanceDemo (void)
 	    pagetic = 170;
 	gamestate = GS_DEMOSCREEN;
 	pagename = "TITLEPIC";
-	/*if ( gamemode == commercial )
+	if ( gamemode == commercial )
 	  S_StartMusic(mus_dm2ttl);
 	else
-	  S_StartMusic (mus_intro);*/
+	  S_StartMusic (mus_intro);
 	break;
       case 1:
 	G_DeferedPlayDemo ("demo1");
@@ -497,7 +495,7 @@ void D_AdvanceDemo (void)
 	{
 	    pagetic = 35 * 11;
 	    pagename = "TITLEPIC";
-	    //S_StartMusic(mus_dm2ttl);
+	    S_StartMusic(mus_dm2ttl);
 	}
 	else
 	{
@@ -1105,8 +1103,8 @@ void D_DoomMain (void)
     printf ("D_CheckNetGame: Checking network game status.\n");
     D_CheckNetGame ();
 
-    //printf ("S_Init: Setting up sound.\n");
-    //S_Init (snd_SfxVolume /* *8 */, snd_MusicVolume /* *8*/ );
+    printf ("S_Init: Setting up sound.\n");
+    S_Init (snd_SfxVolume /* *8 */, snd_MusicVolume /* *8*/ );
 
     printf ("HU_Init: Setting up heads up display.\n");
     HU_Init ();

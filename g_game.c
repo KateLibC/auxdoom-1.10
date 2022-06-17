@@ -56,7 +56,7 @@ rcsid[] = "$Id: g_game.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 
 #include "p_local.h" 
 
-// #include "s_sound.h"
+#include "s_sound.h"
 
 // Data.
 #include "dstrings.h"
@@ -705,10 +705,10 @@ void G_Ticker (void)
 		{ 
 		  case BTS_PAUSE: 
 		    paused ^= 1; 
-		    //if (paused) 
-			//S_PauseSound (); 
-		    //else 
-			//S_ResumeSound (); 
+		    if (paused) 
+			S_PauseSound (); 
+		    else 
+			S_ResumeSound (); 
 		    break; 
 					 
 		  case BTS_SAVEGAME: 
@@ -882,8 +882,8 @@ G_CheckSpot
 		      , ss->sector->floorheight 
 		      , MT_TFOG); 
 	 
-    //if (players[consoleplayer].viewz != 1) 
-	//S_StartSound (mo, sfx_telept);	// don't start sound on first frame 
+    if (players[consoleplayer].viewz != 1) 
+	S_StartSound (mo, sfx_telept);	// don't start sound on first frame 
  
     return true; 
 } 
@@ -1372,7 +1372,7 @@ G_InitNew
     if (paused) 
     { 
 	paused = false; 
-	//S_ResumeSound (); 
+	S_ResumeSound (); 
     } 
 	
 

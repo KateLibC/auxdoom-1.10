@@ -314,9 +314,9 @@ AM_getIslope
 
     dy = ml->a.y - ml->b.y;
     dx = ml->b.x - ml->a.x;
-    if (!dy) is->islp = (dx<0?-MAXINT:MAXINT);
+    if (!dy) is->islp = ((dx < 0) ? -(MAXINT) : (MAXINT));
     else is->islp = FixedDiv(dx, dy);
-    if (!dx) is->slp = (dy<0?-MAXINT:MAXINT);
+    if (!dx) is->slp = ((dy < 0) ? -(MAXINT) : (MAXINT));
     else is->slp = FixedDiv(dy, dx);
 
 }
@@ -392,8 +392,8 @@ void AM_findMinMaxBoundaries(void)
     fixed_t a;
     fixed_t b;
 
-    min_x = min_y =  MAXINT;
-    max_x = max_y = -MAXINT;
+    min_x = min_y = (MAXINT);
+    max_x = max_y = -(MAXINT);
   
     for (i=0;i<numvertexes;i++)
     {
@@ -431,7 +431,7 @@ void AM_changeWindowLoc(void)
     if (m_paninc.x || m_paninc.y)
     {
 	followplayer = 0;
-	f_oldloc.x = MAXINT;
+	f_oldloc.x = (MAXINT);
     }
 
     m_x += m_paninc.x;
@@ -463,7 +463,7 @@ void AM_initVariables(void)
     automapactive = true;
     fb = screens[0];
 
-    f_oldloc.x = MAXINT;
+    f_oldloc.x = (MAXINT);
     amclock = 0;
     lightlev = 0;
 
@@ -678,7 +678,7 @@ AM_Responder
 	    break;
 	  case AM_FOLLOWKEY:
 	    followplayer = !followplayer;
-	    f_oldloc.x = MAXINT;
+	    f_oldloc.x = (MAXINT);
 	    plr->message = followplayer ? AMSTR_FOLLOWON : AMSTR_FOLLOWOFF;
 	    break;
 	  case AM_GRIDKEY:
