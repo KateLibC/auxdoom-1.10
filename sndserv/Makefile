@@ -37,10 +37,10 @@ all: output $(O)/sndserver
 clean:
 	rm -f *.o *~ *.flc
 	rm -f $(O)/*
-	if test -d $(O) ; then rmdir $(O) ; fi
+	if /bin/test -d $(O) ; then /bin/rmdir $(O) ; fi
 
 output:
-	if ! test -d $(O) ; then mkdir -p $(O) ; fi
+	if ! /bin/test -d $(O) ; then /bin/mkdir $(O) ; fi
 
 # Target
 $(O)/sndserver: $(OBJS)
