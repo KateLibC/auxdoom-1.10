@@ -58,6 +58,7 @@ int recvfrom(int s, char *buf, int len, int flags, struct sockaddr *from, int *f
 int gethostname(char *name, int namelen);
 int strcasecmp(char *s1, char *s2);
 int setitimer(int which, struct itimerval *value, struct itimerval *ovalue);
+void *alloca(size_t size);
 
 /* strncasecmp.c */
 int strncasecmp(char *s1, char *s2, size_t n);

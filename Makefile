@@ -87,7 +87,7 @@ endif
 ifeq ($(OS),A/UX)
 O        = aux
 CFLAGS  += -DAUX -DSNDSERV -D_POSIX_SOURCE -I./auxhelp
-LIBS    += -lbsd -lposix
+LIBS    += -lPW -lbsd -lposix
 BIN      = $(O)/auxdoom
 SUBDIRS  = sndserv
 endif

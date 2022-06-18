@@ -205,12 +205,7 @@ void W_AddFile (char *filename)
 	header.numlumps = LONG(header.numlumps);
 	header.infotableofs = LONG(header.infotableofs);
 	length = header.numlumps*sizeof(filelump_t);
-#ifdef LINUX
 	fileinfo = alloca (length);
-#endif
-#ifdef AUX
-	fileinfo = (filelump_t *) malloc (length);
-#endif
 	lseek (handle, header.infotableofs, SEEK_SET);
 	read (handle, fileinfo, length);
 	numlumps += header.numlumps;
@@ -267,12 +262,7 @@ void W_Reload (void)
     lumpcount = LONG(header.numlumps);
     header.infotableofs = LONG(header.infotableofs);
     length = lumpcount*sizeof(filelump_t);
-#ifdef LINUX
     fileinfo = alloca (length);
-#endif
-#ifdef AUX
-    fileinfo = malloc (length);
-#endif
     lseek (handle, header.infotableofs, SEEK_SET);
     read (handle, fileinfo, length);
     
