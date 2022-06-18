@@ -86,6 +86,12 @@ endif
 ifeq ($(OS),A/UX)
 O        = aux
 CFLAGS  += -DAUX -DSNDSERV -D_POSIX_SOURCE -I./auxhelp
+# A/UX divides up the system libraries by standard or addon.  libc
+# comes along for the ride when you compile, but if you use a BSD or
+# POSIX function, they may live in libbsd.a or libposix.a.  Use nm to
+# check those libraries in /lib to figure out where the functions
+# live.  libPW.a provides alloca(), for instance.  Don't worry, there
+# are not many libraries in /lib to search.
 LIBS    += -lPW -lbsd -lposix
 BIN      = $(O)/auxdoom
 SUBDIRS  = sndserv
