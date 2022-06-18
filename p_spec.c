@@ -384,7 +384,7 @@ P_FindLowestCeilingSurrounding(sector_t* sec)
     int			i;
     line_t*		check;
     sector_t*		other;
-    fixed_t		height = MAXINT;
+    fixed_t		height = (MAXINT);
 	
     for (i=0 ;i < sec->linecount ; i++)
     {
@@ -1148,7 +1148,7 @@ void P_UpdateSpecials (void)
 			buttonlist[i].btexture;
 		    break;
 		}
-		//S_StartSound((mobj_t *)&buttonlist[i].soundorg,sfx_swtchn);
+		S_StartSound((mobj_t *)&buttonlist[i].soundorg,sfx_swtchn);
 		memset(&buttonlist[i],0,sizeof(button_t));
 	    }
 	}

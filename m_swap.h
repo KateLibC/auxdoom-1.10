@@ -31,7 +31,7 @@
 
 // Endianess handling.
 // WAD files are stored little endian.
-#ifdef mc68000
+#ifdef AUX
 unsigned short	SwapSHORT(unsigned short);
 unsigned long	SwapLONG(unsigned long);
 #define SHORT(x)	((short)SwapSHORT((unsigned short) (x)))

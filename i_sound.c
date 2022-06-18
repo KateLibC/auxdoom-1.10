@@ -33,20 +33,26 @@ rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 #include <sys/time.h>
 #include <sys/types.h>
 
-/* #ifndef LINUX
+#if !defined(LINUX) && !defined(AUX)
 #include <sys/filio.h>
-#endif */
+#endif
 
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
 
+#ifdef LINUX
 // Linux voxware output.
-// #include <linux/soundcard.h>
+#include <linux/soundcard.h>
+#endif
 
 // Timer stuff. Experimental.
 #include <time.h>
 #include <signal.h>
+
+#ifdef AUX
+#include "auxhelp.h"
+#endif
 
 #include "z_zone.h"
 
@@ -956,7 +962,11 @@ int I_SoundSetTimer( int duration_of_tick )
 #ifndef sun    
   //ac	t.sa_mask = _sig;
 #endif
+#ifdef SA_RESTART
   act.sa_flags = SA_RESTART;
+#else
+  act.sa_flags = 0;
+#endif
   
   sigaction( sig, &act, &oact );
 

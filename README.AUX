@@ -1,0 +1,52 @@
+Doom ported to A/UX 3.1.1
+Various notes and other whatnot
+===============================
+
+The Makefiles in this tree are either written to build on A/UX or modified so
+that you can build on A/UX.
+
+GNU make is required.  As is Jim Jagielski's gcc 2.7.2 build from a jagubox
+mirror.
+
+There are two parts to build:
+
+1) sndserver
+
+   The sndserver is a second process that Doom launches to handle game sounds
+   on Unix systems.
+
+2) auxdoom-1.10
+
+   This is linuxdoom-1.10 from the id DOOM repo modified to build for
+   A/UX.  This builds the actual game.
+
+Put both 'sndserver' and 'auxdoom' in the same directory with the WAD file in
+order to play.
+
+Notes:
+
+* A/UX header files lack a lot of function prototypes despite the libraries
+  providing functions.  Man pages document the functions.  For these various
+  functions, prototypes have been added to the 'auxhelp.h' header file to
+  appease the compiler.
+
+* A/UX's C library lacks strcasecmp() and strncasecmp().  Both of those have
+  been added to this tree.  Technically A/UX was released after those were
+  added to the C standard, so I won't fault it too much.
+
+* Some of the A/UX header files are broken with gcc.  You may run in to cpp
+  telling you about a problem in /usr/include/mac/sm.h.  This comes from the
+  'typedef pascal' line.  Since this build is using gcc, there's not a lot
+  of support in place for this aspect of the A/UX headers.  I changed:
+      typedef pascal void (*SndDoubleBackProcPtr) ();
+  to:
+      typedef void (*SndDoubleBackProcPtr) ();
+  in /usr/include/mac/sm.h around line 155 or so.  I tried to #define
+  my way around this so I would not need to edit the header file.  If
+  I have missed something obvious here, patches welcome.
+
+* Do not build with debugging symbols enabled.  I mean, you can, but you will
+  probably exhaust your memory.
+
+-- 
+David Cantrell <dcantrell@burdell.org>

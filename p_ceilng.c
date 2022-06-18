@@ -72,10 +72,9 @@ void T_MoveCeiling (ceiling_t* ceiling)
 	      case silentCrushAndRaise:
 		break;
 	      default:
-		//S_StartSound((mobj_t *)&ceiling->sector->soundorg,
-		//	     sfx_stnmov);
+		S_StartSound((mobj_t *)&ceiling->sector->soundorg,
+			     sfx_stnmov);
 		// ?
-		  sleep(0);
 		break;
 	    }
 	}
@@ -89,10 +88,9 @@ void T_MoveCeiling (ceiling_t* ceiling)
 		break;
 		
 	      case silentCrushAndRaise:
-		//S_StartSound((mobj_t *)&ceiling->sector->soundorg,
-		//	     sfx_pstop);
-	      sleep(0);
-		  case fastCrushAndRaise:
+		S_StartSound((mobj_t *)&ceiling->sector->soundorg,
+			     sfx_pstop);
+	      case fastCrushAndRaise:
 	      case crushAndRaise:
 		ceiling->direction = -1;
 		break;
@@ -117,10 +115,9 @@ void T_MoveCeiling (ceiling_t* ceiling)
 	    {
 	      case silentCrushAndRaise: break;
 	      default:
-		//S_StartSound((mobj_t *)&ceiling->sector->soundorg,
-		//	     sfx_stnmov);
-	    sleep(0);
-		}
+		S_StartSound((mobj_t *)&ceiling->sector->soundorg,
+			     sfx_stnmov);
+	    }
 	}
 	
 	if (res == pastdest)
@@ -128,10 +125,9 @@ void T_MoveCeiling (ceiling_t* ceiling)
 	    switch(ceiling->type)
 	    {
 	      case silentCrushAndRaise:
-		//S_StartSound((mobj_t *)&ceiling->sector->soundorg,
-		//	     sfx_pstop);
-	      sleep(0);
-		  case crushAndRaise:
+		S_StartSound((mobj_t *)&ceiling->sector->soundorg,
+			     sfx_pstop);
+	      case crushAndRaise:
 		ceiling->speed = CEILSPEED;
 	      case fastCrushAndRaise:
 		ceiling->direction = 1;

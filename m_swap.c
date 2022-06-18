@@ -29,17 +29,13 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 #pragma implementation "m_swap.h"
 #endif
 #include "m_swap.h"
-#include "stdio.h"
 
-//#define __BIG_ENDIAN__
 
-// Not needed with big endian.
-#ifdef mc68000
+#ifdef AUX
 
 // Swap 16bit, that is, MSB and LSB byte.
 unsigned short SwapSHORT(unsigned short x)
 {
-	//printf("LMAO short\n");
     // No masking with 0xFF should be necessary. 
     return (x>>8) | (x<<8);
 }
@@ -47,7 +43,6 @@ unsigned short SwapSHORT(unsigned short x)
 // Swapping 32bit.
 unsigned long SwapLONG( unsigned long x)
 {
-	//printf("LMAO long\n");
     return
 	(x>>24)
 	| ((x>>8) & 0xff00)

@@ -652,18 +652,18 @@ void TryRunTics (void)
     // get available tics
     NetUpdate ();
 	
-    lowtic = MAXINT;
+    lowtic = (MAXINT);
     numplaying = 0;
     for (i=0 ; i<doomcom->numnodes ; i++)
     {
 	if (nodeingame[i])
 	{
 	    numplaying++;
-	    if (nettics[i] < lowtic)
+	    if (nettics[i] < (lowtic))
 		lowtic = nettics[i];
 	}
     }
-    availabletics = lowtic - gametic/ticdup;
+    availabletics = (lowtic) - gametic/ticdup;
     
     // decide how many tics to run
     if (realtics < availabletics-1)
@@ -712,16 +712,16 @@ void TryRunTics (void)
     }// demoplayback
 	
     // wait for new tics if needed
-    while (lowtic < gametic/ticdup + counts)	
+    while ((lowtic) < gametic/ticdup + counts)	
     {
 	NetUpdate ();   
-	lowtic = MAXINT;
+	lowtic = (MAXINT);
 	
 	for (i=0 ; i<doomcom->numnodes ; i++)
-	    if (nodeingame[i] && nettics[i] < lowtic)
+	    if (nodeingame[i] && nettics[i] < (lowtic))
 		lowtic = nettics[i];
 	
-	if (lowtic < gametic/ticdup)
+	if ((lowtic) < gametic/ticdup)
 	    I_Error ("TryRunTics: lowtic < gametic");
 				
 	// don't stay in here forever -- give the menu a chance to work
@@ -737,7 +737,7 @@ void TryRunTics (void)
     {
 	for (i=0 ; i<ticdup ; i++)
 	{
-	    if (gametic/ticdup > lowtic)
+	    if (gametic/ticdup > (lowtic))
 		I_Error ("gametic>lowtic");
 	    if (advancedemo)
 		D_DoAdvanceDemo ();

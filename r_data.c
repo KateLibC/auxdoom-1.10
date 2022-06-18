@@ -27,6 +27,10 @@
 static const char
 rcsid[] = "$Id: r_data.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 
+#ifdef AUX
+#include "auxhelp.h"
+#endif
+
 #include "i_system.h"
 #include "z_zone.h"
 
@@ -41,10 +45,13 @@ rcsid[] = "$Id: r_data.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 #include "doomstat.h"
 #include "r_sky.h"
 
+#ifdef LINUX
+#include <alloca.h>
+#endif
+
+#ifdef AUX
 #include <malloc.h>
-//#ifdef LINUX
-//#include  <alloca.h>
-//#endif
+#endif
 
 
 #include "r_data.h"
@@ -449,9 +456,8 @@ void R_InitTextures (void)
     names = W_CacheLumpName ("PNAMES", PU_STATIC);
     nummappatches = LONG ( *((int *)names) );
     name_p = names+4;
-    //patchlookup = alloca (nummappatches*sizeof(*patchlookup));
-    patchlookup = malloc (nummappatches*sizeof(*patchlookup));
-	
+    patchlookup = alloca (nummappatches*sizeof(*patchlookup));
+    
     for (i=0 ; i<nummappatches ; i++)
     {
 	strncpy (name,name_p+i*8, 8);
@@ -695,9 +701,6 @@ int R_FlatNumForName (char* name)
 // Check whether texture is available.
 // Filter out NoTexture indicator.
 //
-
-
-
 int	R_CheckTextureNumForName (char *name)
 {
     int		i;
