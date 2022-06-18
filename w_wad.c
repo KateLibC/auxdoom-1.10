@@ -37,9 +37,6 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #ifdef LINUX
 #include <alloca.h>
 #endif
-#ifdef AUX
-#include <malloc.h>
-#endif
 #define O_BINARY		0
 #endif
 
@@ -67,10 +64,10 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 //
 
 // Location of each lump on disk.
-lumpinfo_t*		lumpinfo;
-int			numlumps;
+lumpinfo_t*		lumpinfo = NULL;
+int			numlumps = 0;
 
-void**			lumpcache;
+void**			lumpcache = NULL;
 
 
 #define strcmpi	strcasecmp
@@ -177,7 +174,7 @@ void W_AddFile (char *filename)
 
     printf (" adding %s\n",filename);
     startlump = numlumps;
-	
+
     if (strcmpi (filename+strlen(filename)-3 , "wad" ) )
     {
 	// single lump file
@@ -211,7 +208,6 @@ void W_AddFile (char *filename)
 	numlumps += header.numlumps;
     }
 
-    
     // Fill in lumpinfo
     lumpinfo = realloc (lumpinfo, numlumps*sizeof(lumpinfo_t));
 
@@ -306,7 +302,7 @@ void W_InitMultipleFiles (char** filenames)
     numlumps = 0;
 
     // will be realloced as lumps are added
-    lumpinfo = malloc(sizeof(lumpinfo_t));	
+    lumpinfo = malloc(1);
 
     for ( ; *filenames ; filenames++)
 	W_AddFile (*filenames);
