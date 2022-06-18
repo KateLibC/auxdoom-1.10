@@ -41,7 +41,12 @@ Notes:
       typedef pascal void (*SndDoubleBackProcPtr) ();
   to:
       typedef void (*SndDoubleBackProcPtr) ();
-  in /usr/include/mac/sm.h around line 155 or so.
+  in /usr/include/mac/sm.h around line 155 or so.  I tried to #define
+  my way around this so I would not need to edit the header file.  If
+  I have missed something obvious here, patches welcome.
 
 * Do not build with debugging symbols enabled.  I mean, you can, but you will
   probably exhaust your memory.
+
+-- 
+David Cantrell <dcantrell@burdell.org>
